@@ -1,0 +1,4 @@
+*.cfg
+!ref.cfg
+*.pkl
+*.cfg.out
