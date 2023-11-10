@@ -22,6 +22,10 @@ def set_cache_asso(lines, asso):
     line2 = lines[2].split()
     line2[-1] = str(asso)+'\n'
     lines[2] = " ".join(line2)
+    #if asso == 0:
+    #    lines[4] = "-search port 1\n" # how many search ports?
+    #else:
+    #    lines[4] = "\n"
 
 def parse_results(olines):
     d = dict()
@@ -43,11 +47,12 @@ def d2list(d):
 f = open("ref.cfg",'r')
 lines = f.readlines()
 results = list()
-for associativity_pow in range(5):
-    associativity = 2 ** associativity_pow
+associativities = [1, 2, 4]
+cache_size_list = [base*m for base in [2**i for i in range(9,17)] for m in range(4,8)]
+for associativity in associativities:
     print(associativity)
-    for cache_size_pow in range(14, 24, 2):#30
-        cache_size = 2**cache_size_pow
+    for cache_size in cache_size_list:
+        print("#",end='',flush=True)
         set_cache_size(lines, cache_size)
         set_cache_asso(lines, associativity)
         f_out = open("tmp.cfg", 'w')
@@ -59,9 +64,8 @@ for associativity_pow in range(5):
         else:
             olines = run_result.stdout.split('\n')
             result = parse_results(olines)
-        results.append([associativity_pow, cache_size_pow] + d2list(result))
+        results.append([associativity, cache_size] + d2list(result))
+    print("")
 f_p = open("results.pkl",'wb')
-print("opened")
 pickle.dump(results, f_p)
 f_p.close()
-print("closed")
