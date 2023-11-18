@@ -47,8 +47,8 @@ def d2list(d):
 f = open("ref.cfg",'r')
 lines = f.readlines()
 results = list()
-associativities = [1, 2, 4]
-cache_size_list = [base*m for base in [2**i for i in range(9,17)] for m in range(4,8)]
+associativities = [1, 2, 4, 8, 16]
+cache_size_list = [base*m for base in [2**i for i in range(8,22)] for m in range(16,32)]
 for associativity in associativities:
     print(associativity)
     for cache_size in cache_size_list:
@@ -64,7 +64,7 @@ for associativity in associativities:
         else:
             olines = run_result.stdout.split('\n')
             result = parse_results(olines)
-        results.append([associativity, cache_size] + d2list(result))
+            results.append([associativity, cache_size] + d2list(result))
     print("")
 f_p = open("results.pkl",'wb')
 pickle.dump(results, f_p)
